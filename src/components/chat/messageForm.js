@@ -1,4 +1,6 @@
-class SendMessageForm extends React.Component {
+import React, { Component } from "react";
+
+class MessageForm extends React.Component {
     constructor() {
       super()
       this.state = {
@@ -36,3 +38,5 @@ class SendMessageForm extends React.Component {
       )
     }
   }
+
+  export default MessageForm;

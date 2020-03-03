@@ -1,4 +1,6 @@
-class MessageList extends React.Component {
+import React, { Component } from "react";
+
+class Messages extends React.Component {
     render() {
       return (
         <ul className="message-list">                 
@@ -18,3 +20,5 @@ class MessageList extends React.Component {
       )
     }
   }
+
+  export default Messages;
