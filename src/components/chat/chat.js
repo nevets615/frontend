@@ -1,47 +1,66 @@
 import React, { Component } from "react";
 import "./chat.css";
-import MessageForm from "./messageForm"
-import Messages from "./messages"
-const instanceLocator = "v1:us1:2f8e0c2d-38f6-4f78-9a1c-e339238520a8";
+import MessageForm from "./messageForm";
+import Messages from "./messages";
+import { ChatManager, TokenProvider } from "@pusher/chatkit-client";
+
+const instanceLocator = "v1:us1:77ce90b4-645a-4a9e-be1f-6624fe216506";
 
 const testToken =
-  "https://us1.pusherplatform.io/services/chatkit_token_provider/v1/2f8e0c2d-38f6-4f78-9a1c-e339238520a8/token";
+  "https://us1.pusherplatform.io/services/chatkit_token_provider/v1/77ce90b4-645a-4a9e-be1f-6624fe216506/token";
 
-const username = "surj615";
+const userId = "steven999";
 
-const roomId = 3494839852;
+const roomId = "800d045b-1b73-434b-adb3-113016ac1065";
 
 class Chat extends React.Component {
   constructor() {
     super();
     this.state = {
-      messages: ""
+      messages: []
     };
-}
-componentDidMount() {
-    const chatManager = new Chatkit.ChatManager({
+    this.sendMessage = this.sendMessage.bind(this)
+  }
+  componentDidMount() {
+    const chatManager = new ChatManager({
       instanceLocator: instanceLocator,
       userId: userId,
-      tokenProvider: new Chatkit.TokenProvider({
+      tokenProvider: new TokenProvider({
         url: testToken
       })
-   })
-}
-   sendMessage(text) {
-    this.currentUser.sendMessage({
+    });
+
+    chatManager.connect().then(currentUser => {
+      this.setState({ currentUser: currentUser });
+      return currentUser.subscribeToRoomMultipart({
+        roomId: roomId,
+        hooks: {
+          onMessage: message => {
+            this.setState({
+              messages: [...this.state.messages, message]
+            });
+          }
+        }
+      });
+    });
+  }
+  
+  sendMessage(text) {
+    console.log(this.state);
+    this.state.currentUser.sendMessage({
       text: text,
       roomId: roomId
-    })
+    });
   }
 
   render() {
+    console.log(this.state)
     return (
       <div className="app">
         <Messages messages={this.state.messages} />
-        <MessageForm />
+        <MessageForm sendMessage={this.sendMessage} />
       </div>
     );
   }
-
 }
 export default Chat;
