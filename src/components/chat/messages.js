@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { withChatkit } from "@pusher/chatkit-client-react";
+import "./chat.css";
+
 class Messages extends React.Component {
   constructor () {
     super()

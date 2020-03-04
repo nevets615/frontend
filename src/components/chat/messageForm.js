@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+import "./chat.css";
 class MessageForm extends React.Component{
 
 
